@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    container_name: catholicae-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: catholicae
+      POSTGRES_PASSWORD: catholicae
+      POSTGRES_DB: catholicae
+    ports:
+      - "5432:5432"
+    volumes:
+      - catholicae_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catholicae -d catholicae"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  catholicae_postgres_data:

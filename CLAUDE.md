@@ -1,45 +1,66 @@
-# CLAUDE.md — Catholicaê
+# Instruções para o Claude Code
 
-Instruções para Claude Code neste repositório.
+## 🎯 Objetivo
 
-## Projeto
+Construir o Catholicaê MVP de forma simples, funcional e rápida.
 
-Monorepo — plataforma católica com mobile (React Native/Expo), backend (NestJS), painel web (Next.js).
+---
 
-## Estrutura
+## 🚨 Regras
 
-```
-apps/        # Aplicações: mobile, web, api
-packages/    # Compartilhados: ui, types, utils, config
-prisma/      # Schema e migrations
-docker/      # Docker configs
-docs/        # Documentação adicional
-.github/     # CI/CD workflows
-```
+- Não criar funcionalidades além do solicitado
+- Não adicionar autenticação no MVP
+- Não criar painel admin
+- Não criar dioceses
+- Não criar representantes
 
-## Convenções
+---
 
-- **Commits:** Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`)
-- **Branches:** `feat/nome`, `fix/nome`, `chore/nome`
-- **PRs:** sempre para `develop`; `develop` → `main` via release
-- **Idioma:** código em inglês, docs em português
+## 🧱 Princípio principal
 
-## Stack
+> Primeiro fazer funcionar. Depois melhorar.
 
-- Backend: NestJS + Prisma + PostgreSQL
-- Mobile: React Native + Expo
-- Web: Next.js
-- Monorepo: Turborepo
+---
 
-## Restrições
+## 📦 Stack obrigatória
 
-- Não instalar dependências sem consultar
-- Não alterar schema Prisma sem migration correspondente
-- Não fazer push direto para `main`
-- Não commitar `.env` ou secrets
+- NestJS
+- Prisma
+- PostGIS
+- Expo
+- TypeScript
 
-## Testes
+---
 
-- Unit: Jest
-- E2E: Supertest (backend), Detox (mobile — futuro)
-- Rodar antes de commit: `turbo run test`
+## 🧠 Arquitetura
+
+- Backend em módulos
+- Separação clara de responsabilidades
+- Sem overengineering
+
+---
+
+## 🗺️ Core do sistema
+
+Tudo gira em torno de:
+
+GET /churches/nearby
+
+---
+
+## 🚫 Proibido
+
+- Overengineering
+- Microservices
+- Auth precoce
+- Abstrações desnecessárias
+
+---
+
+## 📌 Direção
+
+Sempre otimizar para:
+
+- velocidade de desenvolvimento
+- simplicidade
+- dados reais

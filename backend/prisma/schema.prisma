@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Church {
+  id           Int                                    @id @default(autoincrement())
+  name         String
+  latitude     Float
+  longitude    Float
+  address      String?
+  city         String?
+  state        String?
+  phone        String?
+  openingHours String?
+  source       String
+  location     Unsupported("geography(Point, 4326)")?
+  createdAt    DateTime                               @default(now())
+
+  @@index([location], type: Gist)
+}
+
+// Additional indexes managed outside Prisma's schema DSL (raw SQL in
+// migrations, same pattern used for the postgis extensions):
+//   - Church_name_trgm_idx: GIN trigram index for name search
+//   - Church_city_idx / Church_state_idx: btree for exact filters

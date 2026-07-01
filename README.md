@@ -1,83 +1,57 @@
 # Catholicaê
 
-Plataforma de gestão e engajamento para comunidades católicas — conectando paróquias, grupos e fiéis em um único ecossistema digital.
+> Encontre uma igreja católica perto de você.
+
+O Catholicaê é um aplicativo que mostra igrejas católicas próximas com base na sua localização, permitindo que qualquer pessoa encontre rapidamente uma paróquia para participar da Santa Missa.
 
 ---
 
-## Objetivos
+## 🎯 Objetivo
 
-- Facilitar a comunicação entre lideranças paroquiais e comunidade
-- Centralizar agenda de missas, eventos e grupos pastorais
-- Oferecer ferramentas de engajamento (doações, intenções de missa, avisos)
-- Permitir gestão de membros e sacramentos
-- Disponibilizar conteúdo espiritual (reflexões, leituras do dia, podcasts)
+Permitir que usuários encontrem igrejas católicas próximas de forma simples, rápida e confiável.
 
 ---
 
-## Tecnologias Previstas
+## 📱 MVP
 
-| Camada | Tecnologia |
-|---|---|
-| Mobile | React Native + Expo |
-| Backend | NestJS (Node.js) |
-| Banco de dados | PostgreSQL + Prisma ORM |
-| Cache | Redis |
-| Armazenamento | AWS S3 / Cloudflare R2 |
-| Autenticação | JWT + OAuth2 |
-| Infra | Docker + CI/CD GitHub Actions |
-| Monorepo | Turborepo |
+- Visualizar igrejas próximas no mapa
+- Listar igrejas por proximidade
+- Ver detalhes da igreja
+- Abrir rota no mapa
+
+Sem login. Sem cadastro. Sem complexidade.
 
 ---
 
-## Estrutura de Pastas
+## 🗺️ Fonte de dados
 
-```
-catholicae/
-├── apps/           # Aplicações (mobile, web, admin)
-├── packages/       # Pacotes compartilhados (UI, utils, types)
-├── docs/           # Documentação técnica e de produto
-├── prisma/         # Schema e migrations do banco de dados
-├── docker/         # Configurações Docker
-└── .github/        # CI/CD workflows e templates
-```
+As igrejas são obtidas automaticamente do OpenStreetMap (Overpass API):
+
+- amenity=place_of_worship
+- denomination=catholic ou roman_catholic
 
 ---
 
-## Como Iniciar
+## 🧱 Arquitetura
 
-> Documentação de setup será adicionada na Sprint 0.
+Monorepo com:
+
+- API (NestJS)
+- Mobile (Expo)
+- Admin (futuro)
+- PostgreSQL + PostGIS
+
+---
+
+## 🚀 Como rodar
 
 ```bash
-# Em breve
+cp backend/.env.example backend/.env
+pnpm install
+docker compose -f docker/docker-compose.yml up -d
+pnpm --filter @catholicae/backend run prisma:migrate
+pnpm --filter @catholicae/backend run import:osm
+pnpm dev
 ```
 
----
-
-## Documentação
-
-| Arquivo | Conteúdo |
-|---|---|
-| [PRODUCT.md](./PRODUCT.md) | Visão de produto, personas e roadmap de features |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Arquitetura do sistema e decisões técnicas |
-| [SPRINTS.md](./SPRINTS.md) | Histórico e planejamento de sprints |
-| [CHANGELOG.md](./CHANGELOG.md) | Registro de mudanças por versão |
-| [CLAUDE.md](./CLAUDE.md) | Instruções para Claude Code neste repositório |
-
----
-
-## Roadmap
-
-| Sprint | Foco |
-|---|---|
-| Sprint 0 | Setup do monorepo, infraestrutura base, CI/CD |
-| Sprint 1 | Autenticação, cadastro de paróquias e usuários |
-| Sprint 2 | Agenda de missas e eventos |
-| Sprint 3 | Grupos pastorais e comunicados |
-| Sprint 4 | Doações e intenções de missa |
-| Sprint 5 | Conteúdo espiritual e notificações push |
-
----
-
-## Licença
-
-MIT © 2026 Catholicaê
+**Nota (mapa no mobile):** o app usa `react-native-maps`. No Expo Go, o Android usa a chave de desenvolvimento do próprio Expo — funciona sem configuração. Para builds de produção (EAS Build) é preciso configurar `android.config.googleMaps.apiKey` em `frontend/app.json` com uma chave real do Google Maps.
