@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, Text, View } from "react-native";
+import { ActivityIndicator, Button, StyleSheet, Text, View } from "react-native";
 import { useChurch } from "../api/churches";
 import { openDirections } from "../utils/openDirections";
 import { openInMaps } from "../utils/openInMaps";
@@ -11,7 +11,7 @@ export function ChurchDetailScreen({ route }: RootStackScreenProps<"ChurchDetail
 
   if (isPending) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View style={styles.centered}>
         <ActivityIndicator color="#7C3AED" />
       </View>
     );
@@ -22,20 +22,18 @@ export function ChurchDetailScreen({ route }: RootStackScreenProps<"ChurchDetail
   }
 
   return (
-    <View className="flex-1 gap-2 p-4">
-      <View className="flex-row items-center justify-between">
-        <Text className="flex-1 pr-2 text-2xl font-bold">{church.name}</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.name}>{church.name}</Text>
         <OpenClosedBadge openingHours={church.openingHours} />
       </View>
-      {church.address && <Text className="text-base text-neutral-700">{church.address}</Text>}
+      {church.address && <Text style={styles.line}>{church.address}</Text>}
       {(church.city || church.state) && (
-        <Text className="text-base text-neutral-700">
-          {[church.city, church.state].filter(Boolean).join(" - ")}
-        </Text>
+        <Text style={styles.line}>{[church.city, church.state].filter(Boolean).join(" - ")}</Text>
       )}
-      {church.phone && <Text className="text-base text-neutral-700">{church.phone}</Text>}
+      {church.phone && <Text style={styles.line}>{church.phone}</Text>}
 
-      <View className="mt-4 gap-2">
+      <View style={styles.actions}>
         <Button
           title="Como chegar"
           onPress={() => openDirections(church.latitude, church.longitude)}
@@ -48,3 +46,35 @@ export function ChurchDetailScreen({ route }: RootStackScreenProps<"ChurchDetail
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 8,
+  },
+  centered: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  name: {
+    flex: 1,
+    paddingRight: 8,
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  line: {
+    fontSize: 16,
+    color: "#444444",
+  },
+  actions: {
+    marginTop: 16,
+    gap: 8,
+  },
+});

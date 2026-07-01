@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActivityIndicator, Button, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Button, Pressable, StyleSheet, Text, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -18,7 +18,7 @@ export function MapScreen() {
 
   if (isLoadingLocation || (coords && isPending)) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View style={styles.centered}>
         <ActivityIndicator color="#7C3AED" />
       </View>
     );
@@ -35,9 +35,9 @@ export function MapScreen() {
   }
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       <MapView
-        style={{ flex: 1 }}
+        style={styles.map}
         initialRegion={{
           latitude: coords.latitude,
           longitude: coords.longitude,
@@ -54,8 +54,8 @@ export function MapScreen() {
             onPress={() => setSelected(church)}
           >
             <Callout onPress={() => openDirections(church.latitude, church.longitude)}>
-              <View className="gap-1">
-                <Text className="font-semibold">{church.name}</Text>
+              <View style={styles.calloutContent}>
+                <Text style={styles.calloutTitle}>{church.name}</Text>
                 <OpenClosedBadge openingHours={church.openingHours} />
                 <Text>Toque para ver a rota</Text>
               </View>
@@ -65,14 +65,14 @@ export function MapScreen() {
       </MapView>
       {selected && (
         <Pressable
-          className="absolute bottom-4 left-4 right-4 rounded-lg bg-white p-3 shadow-lg"
+          style={styles.selectedBar}
           onPress={() => navigation.navigate("ChurchDetail", { id: selected.id })}
         >
-          <View className="absolute right-3 top-3">
+          <View style={styles.selectedBadge}>
             <OpenClosedBadge openingHours={selected.openingHours} />
           </View>
-          <View className="flex-row items-center justify-between pr-20">
-            <Text className="shrink font-semibold">{selected.name}</Text>
+          <View style={styles.selectedRow}>
+            <Text style={styles.selectedName}>{selected.name}</Text>
             <Button
               title="Como chegar"
               onPress={() => openDirections(selected.latitude, selected.longitude)}
@@ -83,3 +83,48 @@ export function MapScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+  },
+  centered: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  calloutContent: {
+    gap: 4,
+  },
+  calloutTitle: {
+    fontWeight: "600",
+  },
+  selectedBar: {
+    position: "absolute",
+    bottom: 16,
+    left: 16,
+    right: 16,
+    borderRadius: 8,
+    backgroundColor: "white",
+    padding: 12,
+    elevation: 4,
+  },
+  selectedBadge: {
+    position: "absolute",
+    right: 12,
+    top: 12,
+  },
+  selectedRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: 80,
+  },
+  selectedName: {
+    flexShrink: 1,
+    fontWeight: "600",
+  },
+});

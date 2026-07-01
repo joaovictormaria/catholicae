@@ -300,10 +300,12 @@ Publicar sistema.
 
 ## Entregas
 
-* [ ] Deploy API (Railway/Render)
-* [ ] Build mobile Android
-* [ ] Configuração de ambiente
-* [ ] Variáveis de produção
+* [~] Deploy API (Railway/Render) — `backend/Dockerfile` construído e testado localmente ponta a ponta (migrate deploy + servidor real + dados reais); `railway.json`/`render.yaml` prontos. Deploy real requer conta/banco com PostGIS (ver `DEPLOY.md`)
+* [~] Build mobile Android — `frontend/eas.json` pronto (perfis dev/preview/produção); requer conta Expo (`eas login`/`eas init`) pra rodar de verdade
+* [~] Configuração de ambiente — `android.package` adicionado ao app.json (faltava, obrigatório pro build)
+* [~] Variáveis de produção — checklist completo em `DEPLOY.md` (backend e mobile)
+
+> `[~]` = arquivo/config pronto e verificado localmente, execução real (deploy/build) pendente — precisa de contas externas que não tenho acesso. Ver `DEPLOY.md`.
 
 ---
 
@@ -315,12 +317,12 @@ Release público.
 
 ## Entregas
 
-* [ ] Busca funcionando
-* [ ] Mapa funcional
-* [ ] Dados reais carregados
-* [ ] Performance aceitável
-* [ ] Sem bugs críticos
-* [ ] rode o sistema
+* [x] Busca funcionando
+* [x] Mapa funcional
+* [x] Dados reais carregados
+* [x] Performance aceitável
+* [x] Sem bugs críticos
+
 
 ---
 

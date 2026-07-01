@@ -1,10 +1,10 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export function ChurchListItemSkeleton() {
   return (
-    <View className="gap-1 border-b border-border p-4">
-      <View className="h-4 w-3/5 rounded bg-skeleton" />
-      <View className="h-3 w-3/12 rounded bg-skeleton" />
+    <View style={styles.item}>
+      <View style={[styles.bar, styles.name]} />
+      <View style={[styles.bar, styles.distance]} />
     </View>
   );
 }
@@ -18,3 +18,24 @@ export function ChurchListSkeleton({ count = 6 }: { count?: number }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    padding: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#E0E0E0",
+    gap: 4,
+  },
+  bar: {
+    backgroundColor: "#E5E5E5",
+    borderRadius: 4,
+  },
+  name: {
+    height: 16,
+    width: "60%",
+  },
+  distance: {
+    height: 12,
+    width: "30%",
+  },
+});
