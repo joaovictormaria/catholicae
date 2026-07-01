@@ -1,38 +1,97 @@
-import { StyleSheet, Text, View } from "react-native";
-import { useHealth } from "../api/health";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { NearbyChurch, useNearbyChurches } from "../api/churches";
 import { useUserLocation } from "../location/useUserLocation";
+import { formatDistance } from "../utils/formatDistance";
 
-export function HomeScreen() {
-  const { data, isPending, isError } = useHealth();
-  const { coords, errorMessage, isLoading: isLoadingLocation } = useUserLocation();
-
+function ChurchListItem({ church }: { church: NearbyChurch }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Catholicaê</Text>
-      <Text>Encontre uma igreja católica perto de você.</Text>
-      {isPending && <Text>Conectando à API...</Text>}
-      {isError && <Text>Não foi possível conectar à API.</Text>}
-      {data && <Text>{data.churches} igrejas cadastradas.</Text>}
-      {isLoadingLocation && <Text>Obtendo localização...</Text>}
-      {errorMessage && <Text>{errorMessage}</Text>}
-      {coords && (
-        <Text>
-          Você está em {coords.latitude.toFixed(4)}, {coords.longitude.toFixed(4)}
-        </Text>
-      )}
+    <View style={styles.item}>
+      <Text style={styles.itemName}>{church.name}</Text>
+      <Text style={styles.itemDistance}>{formatDistance(church.distanceMeters)}</Text>
+      {church.address && <Text style={styles.itemAddress}>{church.address}</Text>}
     </View>
   );
 }
 
+export function HomeScreen() {
+  const { coords, errorMessage: locationError, isLoading: isLoadingLocation } = useUserLocation();
+  const { data, isPending, isError, refetch } = useNearbyChurches(coords);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  }, [refetch]);
+
+  if (isLoadingLocation) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator />
+        <Text>Obtendo localização...</Text>
+      </View>
+    );
+  }
+
+  if (locationError) {
+    return (
+      <View style={styles.centered}>
+        <Text>{locationError}</Text>
+      </View>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator />
+        <Text>Buscando igrejas próximas...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.centered}>
+        <Text>Não foi possível carregar as igrejas próximas.</Text>
+      </View>
+    );
+  }
+
+  return (
+    <FlatList
+      contentContainerStyle={data?.churches.length === 0 ? styles.centered : undefined}
+      data={data?.churches ?? []}
+      keyExtractor={(church) => String(church.id)}
+      renderItem={({ item }) => <ChurchListItem church={item} />}
+      refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+      ListEmptyComponent={<Text>Nenhuma igreja encontrada perto de você.</Text>}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
+  centered: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
+  item: {
+    padding: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#ccc",
+  },
+  itemName: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  itemDistance: {
+    color: "#555",
+  },
+  itemAddress: {
+    color: "#777",
+    fontSize: 12,
   },
 });

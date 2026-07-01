@@ -191,11 +191,11 @@ Primeira experiência do usuário.
 
 ## Entregas
 
-* [ ] Lista de igrejas próximas
-* [ ] Distância exibida
-* [ ] Loading state
-* [ ] Empty state
-* [ ] Pull to refresh
+* [x] Lista de igrejas próximas (`useNearbyChurches`, raio 10km)
+* [x] Distância exibida (`formatDistance` — m/km)
+* [x] Loading state (localização + busca)
+* [x] Empty state (`ListEmptyComponent`)
+* [x] Pull to refresh (`RefreshControl`)
 
 ---
 
