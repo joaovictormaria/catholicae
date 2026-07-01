@@ -53,3 +53,5 @@ pnpm --filter @catholicae/backend run prisma:migrate
 pnpm --filter @catholicae/backend run import:osm
 pnpm dev
 ```
+
+**Nota (mapa no mobile):** o app usa `react-native-maps`. No Expo Go, o Android usa a chave de desenvolvimento do próprio Expo — funciona sem configuração. Para builds de produção (EAS Build) é preciso configurar `android.config.googleMaps.apiKey` em `frontend/app.json` com uma chave real do Google Maps.

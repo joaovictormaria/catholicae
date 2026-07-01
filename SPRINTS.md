@@ -207,10 +207,10 @@ Visualização geográfica.
 
 ## Entregas
 
-* [ ] Integração Google Maps / Mapbox
-* [ ] Markers de igrejas
-* [ ] Seleção de igreja
-* [ ] Navegação para rota externa
+* [x] Integração Google Maps / Mapbox (`react-native-maps`, aba "Mapa" nova)
+* [x] Markers de igrejas (uma por igreja próxima)
+* [x] Seleção de igreja (toque no marker mostra barra inferior)
+* [x] Navegação para rota externa (`openDirections` — abre Google Maps)
 
 ---
 

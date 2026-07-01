@@ -1,16 +1,19 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../screens/HomeScreen";
+import { MapScreen } from "../screens/MapScreen";
 
-export type RootStackParamList = {
-  Home: undefined;
+export type RootTabParamList = {
+  Lista: undefined;
+  Mapa: undefined;
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} options={{ title: "Catholicaê" }} />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen name="Lista" component={HomeScreen} />
+      <Tab.Screen name="Mapa" component={MapScreen} />
+    </Tab.Navigator>
   );
 }
