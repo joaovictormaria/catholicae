@@ -23,6 +23,8 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        env:
+          DATABASE_URL: "postgresql://catholicae:catholicae@localhost:5432/catholicae?schema=public"
 
       - name: Lint
         run: pnpm turbo run lint

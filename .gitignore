@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 
 # Expo
 .expo/
+
+# Prisma generated client
+apps/api/src/generated/

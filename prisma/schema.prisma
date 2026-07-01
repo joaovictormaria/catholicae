@@ -1,7 +1,22 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../apps/api/src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Church {
+  id        Int      @id @default(autoincrement())
+  name      String
+  latitude  Float
+  longitude Float
+  address   String?
+  city      String?
+  state     String?
+  source    String
+  createdAt DateTime @default(now())
+
+  @@index([latitude, longitude])
 }

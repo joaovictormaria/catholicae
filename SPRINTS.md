@@ -27,13 +27,13 @@ Criar base técnica do sistema.
 
 ## Entregas
 
-* [ ] Monorepo (pnpm + Turborepo)
-* [ ] Estrutura apps/api, apps/mobile
-* [ ] Prisma configurado
-* [ ] PostgreSQL + PostGIS via Docker
-* [ ] ESLint + Prettier
-* [ ] Config base TypeScript
-* [ ] README inicial
+* [x] Monorepo (pnpm + Turborepo)
+* [x] Estrutura apps/api, apps/mobile
+* [x] Prisma configurado
+* [x] PostgreSQL + PostGIS via Docker
+* [x] ESLint + Prettier
+* [x] Config base TypeScript
+* [x] README inicial
 
 ---
 
@@ -49,13 +49,18 @@ Popular o sistema com igrejas reais.
 
 ## Entregas
 
-* [ ] Script de importação OSM
-* [ ] Filtro: `amenity=place_of_worship + religion=catholic`
-* [ ] Normalização de dados
-* [ ] Persistência no PostgreSQL
-* [ ] Deduplicação básica (nome + distância)
-* [ ] Estrutura inicial da tabela Church
-* [ ] Seed inicial funcionando
+* [x] Script de importação OSM
+* [x] Filtro: `amenity=place_of_worship + denomination=catholic|roman_catholic` (ajustado — OSM Brasil não usa `religion=catholic`, ver nota abaixo)
+* [x] Normalização de dados
+* [x] Persistência no PostgreSQL
+* [x] Deduplicação básica (nome + distância)
+* [x] Estrutura inicial da tabela Church
+* [x] Seed inicial funcionando (12.738 igrejas importadas)
+
+> Nota: o filtro real do OSM no Brasil marca igrejas católicas como
+> `amenity=place_of_worship` + `religion=christian` + `denomination=catholic`
+> (ou `roman_catholic`), não `religion=catholic` como descrito originalmente
+> acima — confirmado testando contra a Overpass API real.
 
 ## Resultado esperado
 

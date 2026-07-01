@@ -25,10 +25,10 @@ Sem login. Sem cadastro. Sem complexidade.
 
 ## 🗺️ Fonte de dados
 
-As igrejas são obtidas automaticamente do OpenStreetMap:
+As igrejas são obtidas automaticamente do OpenStreetMap (Overpass API):
 
 - amenity=place_of_worship
-- religion=catholic
+- denomination=catholic ou roman_catholic
 
 ---
 
@@ -46,5 +46,10 @@ Monorepo com:
 ## 🚀 Como rodar
 
 ```bash
+cp .env.example .env
 pnpm install
+docker compose -f docker/docker-compose.yml up -d
+pnpm prisma:migrate
+pnpm --filter @catholicae/api run import:osm
 pnpm dev
+```
