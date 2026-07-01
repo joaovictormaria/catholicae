@@ -283,11 +283,12 @@ Deixar o app utilizável em produção.
 
 ## Entregas
 
-* [ ] Loading states
-* [ ] Skeletons
-* [ ] Feedback de erro
-* [ ] UI consistente
-* [ ] Ícones e branding
+* [x] Loading states (localização, busca, detalhe — já existiam, revisados)
+* [x] Skeletons (`ChurchListSkeleton` na lista, substitui spinner cru)
+* [x] Feedback de erro (`ErrorState` com botão "Tentar novamente" em Home/Mapa/Detalhe)
+* [x] UI consistente (estilização migrada pra Tailwind/NativeWind, paleta única em `tailwind.config.js`)
+* [x] Ícones e branding (ícones nas tabs via `@expo/vector-icons`, cor de marca no app icon/header/tabs — sem arte/logo nova, não inventada)
+* [x] Ícones flutuantes mostrando se a igreja está aberta ou fechada (campo `openingHours` novo, capturado do OSM; parser `opening_hours` real; badge em lista/mapa/detalhe — 141/12.728 igrejas têm horário)
 
 ---
 
@@ -319,6 +320,7 @@ Release público.
 * [ ] Dados reais carregados
 * [ ] Performance aceitável
 * [ ] Sem bugs críticos
+* [ ] rode o sistema
 
 ---
 

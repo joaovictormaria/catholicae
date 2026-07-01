@@ -8,17 +8,18 @@ datasource db {
 }
 
 model Church {
-  id        Int                                    @id @default(autoincrement())
-  name      String
-  latitude  Float
-  longitude Float
-  address   String?
-  city      String?
-  state     String?
-  phone     String?
-  source    String
-  location  Unsupported("geography(Point, 4326)")?
-  createdAt DateTime                               @default(now())
+  id           Int                                    @id @default(autoincrement())
+  name         String
+  latitude     Float
+  longitude    Float
+  address      String?
+  city         String?
+  state        String?
+  phone        String?
+  openingHours String?
+  source       String
+  location     Unsupported("geography(Point, 4326)")?
+  createdAt    DateTime                               @default(now())
 
   @@index([location], type: Gist)
 }

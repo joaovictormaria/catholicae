@@ -1,26 +1,24 @@
 import { useCallback, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NearbyChurch, useNearbyChurches } from "../api/churches";
 import { useUserLocation } from "../location/useUserLocation";
 import { formatDistance } from "../utils/formatDistance";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { ChurchListSkeleton } from "../components/ChurchListItemSkeleton";
+import { ErrorState } from "../components/ErrorState";
+import { OpenClosedBadge } from "../components/OpenClosedBadge";
 
 function ChurchListItem({ church, onPress }: { church: NearbyChurch; onPress: () => void }) {
   return (
-    <Pressable style={styles.item} onPress={onPress}>
-      <Text style={styles.itemName}>{church.name}</Text>
-      <Text style={styles.itemDistance}>{formatDistance(church.distanceMeters)}</Text>
-      {church.address && <Text style={styles.itemAddress}>{church.address}</Text>}
+    <Pressable className="border-b border-border p-4" onPress={onPress}>
+      <View className="absolute right-4 top-4">
+        <OpenClosedBadge openingHours={church.openingHours} />
+      </View>
+      <Text className="pr-20 text-base font-semibold text-black">{church.name}</Text>
+      <Text className="text-muted">{formatDistance(church.distanceMeters)}</Text>
+      {church.address && <Text className="text-xs text-faint">{church.address}</Text>}
     </Pressable>
   );
 }
@@ -39,41 +37,34 @@ export function HomeScreen() {
 
   if (isLoadingLocation) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator />
-        <Text>Obtendo localização...</Text>
+      <View className="flex-1 items-center justify-center gap-2">
+        <ActivityIndicator color="#7C3AED" />
+        <Text className="text-muted">Obtendo localização...</Text>
       </View>
     );
   }
 
   if (locationError) {
-    return (
-      <View style={styles.centered}>
-        <Text>{locationError}</Text>
-      </View>
-    );
+    return <ErrorState message={locationError} />;
   }
 
   if (isPending) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator />
-        <Text>Buscando igrejas próximas...</Text>
-      </View>
-    );
+    return <ChurchListSkeleton />;
   }
 
   if (isError) {
     return (
-      <View style={styles.centered}>
-        <Text>Não foi possível carregar as igrejas próximas.</Text>
-      </View>
+      <ErrorState message="Não foi possível carregar as igrejas próximas." onRetry={refetch} />
     );
   }
 
   return (
     <FlatList
-      contentContainerStyle={data?.churches.length === 0 ? styles.centered : undefined}
+      contentContainerStyle={
+        data?.churches.length === 0
+          ? { flex: 1, alignItems: "center", justifyContent: "center" }
+          : undefined
+      }
       data={data?.churches ?? []}
       keyExtractor={(church) => String(church.id)}
       renderItem={({ item }) => (
@@ -83,32 +74,9 @@ export function HomeScreen() {
         />
       )}
       refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-      ListEmptyComponent={<Text>Nenhuma igreja encontrada perto de você.</Text>}
+      ListEmptyComponent={
+        <Text className="text-muted">Nenhuma igreja encontrada perto de você.</Text>
+      }
     />
   );
 }
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  item: {
-    padding: 16,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ccc",
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  itemDistance: {
-    color: "#555",
-  },
-  itemAddress: {
-    color: "#777",
-    fontSize: 12,
-  },
-});

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActivityIndicator, Button, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, Pressable, Text, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,33 +7,37 @@ import { NearbyChurch, useNearbyChurches } from "../api/churches";
 import { useUserLocation } from "../location/useUserLocation";
 import { openDirections } from "../utils/openDirections";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { ErrorState } from "../components/ErrorState";
+import { OpenClosedBadge } from "../components/OpenClosedBadge";
 
 export function MapScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { coords, errorMessage: locationError, isLoading: isLoadingLocation } = useUserLocation();
-  const { data, isPending } = useNearbyChurches(coords);
+  const { data, isPending, isError, refetch } = useNearbyChurches(coords);
   const [selected, setSelected] = useState<NearbyChurch | null>(null);
 
   if (isLoadingLocation || (coords && isPending)) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator />
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator color="#7C3AED" />
       </View>
     );
   }
 
   if (locationError || !coords) {
+    return <ErrorState message={locationError ?? "Localização indisponível."} />;
+  }
+
+  if (isError) {
     return (
-      <View style={styles.centered}>
-        <Text>{locationError ?? "Localização indisponível."}</Text>
-      </View>
+      <ErrorState message="Não foi possível carregar as igrejas próximas." onRetry={refetch} />
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1">
       <MapView
-        style={styles.map}
+        style={{ flex: 1 }}
         initialRegion={{
           latitude: coords.latitude,
           longitude: coords.longitude,
@@ -50,58 +54,32 @@ export function MapScreen() {
             onPress={() => setSelected(church)}
           >
             <Callout onPress={() => openDirections(church.latitude, church.longitude)}>
-              <Text style={styles.calloutTitle}>{church.name}</Text>
-              <Text>Toque para ver a rota</Text>
+              <View className="gap-1">
+                <Text className="font-semibold">{church.name}</Text>
+                <OpenClosedBadge openingHours={church.openingHours} />
+                <Text>Toque para ver a rota</Text>
+              </View>
             </Callout>
           </Marker>
         ))}
       </MapView>
       {selected && (
         <Pressable
-          style={styles.selectedBar}
+          className="absolute bottom-4 left-4 right-4 rounded-lg bg-white p-3 shadow-lg"
           onPress={() => navigation.navigate("ChurchDetail", { id: selected.id })}
         >
-          <Text style={styles.selectedName}>{selected.name}</Text>
-          <Button
-            title="Como chegar"
-            onPress={() => openDirections(selected.latitude, selected.longitude)}
-          />
+          <View className="absolute right-3 top-3">
+            <OpenClosedBadge openingHours={selected.openingHours} />
+          </View>
+          <View className="flex-row items-center justify-between pr-20">
+            <Text className="shrink font-semibold">{selected.name}</Text>
+            <Button
+              title="Como chegar"
+              onPress={() => openDirections(selected.latitude, selected.longitude)}
+            />
+          </View>
         </Pressable>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  centered: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  calloutTitle: {
-    fontWeight: "600",
-  },
-  selectedBar: {
-    position: "absolute",
-    bottom: 16,
-    left: 16,
-    right: 16,
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    elevation: 4,
-  },
-  selectedName: {
-    flexShrink: 1,
-    fontWeight: "600",
-  },
-});

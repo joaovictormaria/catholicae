@@ -12,6 +12,7 @@ export interface NearbyChurch {
   city: string | null;
   state: string | null;
   phone: string | null;
+  openingHours: string | null;
   source: string;
   distanceMeters: number;
 }
@@ -25,6 +26,7 @@ export interface Church {
   city: string | null;
   state: string | null;
   phone: string | null;
+  openingHours: string | null;
   source: string;
 }
 
