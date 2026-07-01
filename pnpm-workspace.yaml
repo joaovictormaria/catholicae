@@ -26,3 +26,7 @@ minimumReleaseAgeExclude:
   - expo-modules-core@57.0.1
   - expo@57.0.1
   - turbo@2.10.2
+  - '@react-navigation/core@7.21.3'
+  - '@react-navigation/elements@2.9.27'
+  - '@react-navigation/native-stack@7.17.7'
+  - '@react-navigation/native@7.3.5'

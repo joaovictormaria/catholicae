@@ -159,12 +159,12 @@ Criar estrutura do aplicativo.
 
 ## Entregas
 
-* [ ] Expo + React Native configurado
-* [ ] Navegação básica
-* [ ] Tela inicial
-* [ ] Integração com API
-* [ ] React Query
-* [ ] Axios configurado
+* [x] Expo + React Native configurado (Sprint 0)
+* [x] Navegação básica (`@react-navigation` native-stack, tela Home registrada)
+* [x] Tela inicial (`HomeScreen`)
+* [x] Integração com API (`GET /health` chamado ao vivo, mostra contagem real de igrejas)
+* [x] React Query (`QueryClientProvider` + `useHealth()`)
+* [x] Axios configurado (`apiClient`, `EXPO_PUBLIC_API_URL`)
 
 ---
 
