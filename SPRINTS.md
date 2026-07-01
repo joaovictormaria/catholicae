@@ -101,12 +101,12 @@ Criar backend funcional.
 
 ## Entregas
 
-* [ ] NestJS estruturado
-* [ ] PrismaModule
-* [ ] ChurchesModule
-* [ ] Endpoint healthcheck
-* [ ] Padronização de respostas
-* [ ] Tratamento de erros global
+* [x] NestJS estruturado
+* [x] PrismaModule (PrismaService via `@prisma/adapter-pg`, global)
+* [x] ChurchesModule (service com `count()`, base para Sprint 4/5)
+* [x] Endpoint healthcheck (`GET /health` — status + contagem real de igrejas)
+* [x] Padronização de respostas (`ResponseInterceptor` global — `{ success, data }`)
+* [x] Tratamento de erros global (`AllExceptionsFilter` — `{ success: false, statusCode, path, message }`)
 
 ---
 
@@ -127,7 +127,7 @@ GET /churches/nearby
 * [ ] Query por latitude/longitude
 * [ ] Raio configurável (km)
 * [ ] Ordenação por distância
-* [ ] Paginação básica
+* [ ] Paginação profissional
 * [ ] Performance com índice geográfico
 
 ## Resultado esperado

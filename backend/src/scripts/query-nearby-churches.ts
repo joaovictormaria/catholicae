@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 import { config } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "../../generated/prisma";
 
 config({ path: resolve(__dirname, "../../.env") });
 
