@@ -144,10 +144,10 @@ Permitir exploração do catálogo.
 
 ## Entregas
 
-* [ ] GET /churches/:id
-* [ ] Busca por nome
-* [ ] Filtro por cidade
-* [ ] Filtro por estado
+* [x] GET /churches/:id (404 padronizado se não existir)
+* [x] Busca por nome (`?name=` substring, case-insensitive)
+* [x] Filtro por cidade (`?city=`)
+* [x] Filtro por estado (`?state=`)
 
 ---
 

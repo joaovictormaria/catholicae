@@ -1,6 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { Church, Prisma } from "../../generated/prisma";
 import { NearbyQueryDto } from "./dto/nearby-query.dto";
+import { SearchQueryDto } from "./dto/search-query.dto";
 
 interface NearbyChurchRow {
   id: number;
@@ -27,14 +29,21 @@ export interface NearbyChurch {
   distanceMeters: number;
 }
 
+interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface NearbyResult {
   churches: NearbyChurch[];
-  meta: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  meta: PaginationMeta;
+}
+
+export interface SearchResult {
+  churches: Church[];
+  meta: PaginationMeta;
 }
 
 @Injectable()
@@ -85,5 +94,36 @@ export class ChurchesService {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  async search({ name, city, state, page, limit }: SearchQueryDto): Promise<SearchResult> {
+    const where: Prisma.ChurchWhereInput = {
+      ...(name && { name: { contains: name, mode: "insensitive" } }),
+      ...(city && { city: { equals: city, mode: "insensitive" } }),
+      ...(state && { state: { equals: state, mode: "insensitive" } }),
+    };
+
+    const [churches, total] = await Promise.all([
+      this.prisma.church.findMany({
+        where,
+        orderBy: { name: "asc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.church.count({ where }),
+    ]);
+
+    return {
+      churches,
+      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
+  }
+
+  async findById(id: number): Promise<Church> {
+    const church = await this.prisma.church.findUnique({ where: { id } });
+    if (!church) {
+      throw new NotFoundException(`Church with id ${id} not found`);
+    }
+    return church;
   }
 }
