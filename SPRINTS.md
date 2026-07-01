@@ -253,10 +253,10 @@ Melhorar qualidade da base OSM.
 
 ## Entregas
 
-* [ ] Normalização de nomes
-* [ ] Remoção de duplicados
-* [ ] Correção de coordenadas inválidas
-* [ ] Filtragem de falsos positivos
+* [x] Normalização de nomes (aspas/traços soltos, espaços) + rejeita nomes placeholder ("sem nome", "test", etc.)
+* [x] Remoção de duplicados (haversine real por nome, 100m — achou 89 vs 79 do método antigo por grid)
+* [x] Correção de coordenadas inválidas (bbox Brasil, rejeita null-island 0,0)
+* [x] Filtragem de falsos positivos (nomes sem letra nenhuma são descartados)
 
 ---
 

@@ -46,8 +46,39 @@ interface NormalizedChurch {
   source: string;
 }
 
+const PLACEHOLDER_NAMES = new Set(["", "-", "n/a", "na", "sem nome", "unnamed", "test", "teste"]);
+
 function normalizeName(rawName: string): string {
-  return rawName.replace(/\s+/g, " ").trim();
+  return rawName
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/^["'\-–—]+|["'\-–—]+$/g, "")
+    .trim();
+}
+
+function isValidName(name: string): boolean {
+  if (PLACEHOLDER_NAMES.has(name.toLowerCase())) return false;
+  return /[a-zA-ZÀ-ÿ]/.test(name);
+}
+
+// Rough bounding box for Brazil (including islands); catches null-island (0,0)
+// and other clearly wrong coordinates that shouldn't occur given the Overpass
+// query is already scoped to area["ISO3166-1"="BR"], but are cheap to guard.
+function isValidBrazilCoords(lat: number, lon: number): boolean {
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+  if (lat === 0 && lon === 0) return false;
+  return lat >= -34 && lat <= 6 && lon >= -74 && lon <= -32;
+}
+
+function haversineMeters(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
+  const R = 6371000;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const sinLat = Math.sin(dLat / 2);
+  const sinLon = Math.sin(dLon / 2);
+  const h = sinLat * sinLat + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * sinLon * sinLon;
+  return 2 * R * Math.asin(Math.sqrt(h));
 }
 
 function buildAddress(tags: Record<string, string>): string | null {
@@ -102,17 +133,28 @@ async function fetchOverpassElements(): Promise<OverpassElement[]> {
 
 function normalize(elements: OverpassElement[]): NormalizedChurch[] {
   const churches: NormalizedChurch[] = [];
+  let skippedInvalidName = 0;
+  let skippedInvalidCoords = 0;
 
   for (const el of elements) {
     const tags = el.tags ?? {};
     const rawName = tags.name ?? tags["name:pt"];
     if (!rawName) continue;
 
+    const name = normalizeName(rawName);
+    if (!isValidName(name)) {
+      skippedInvalidName++;
+      continue;
+    }
+
     const coords = elementCoords(el);
-    if (!coords) continue;
+    if (!coords || !isValidBrazilCoords(coords.lat, coords.lon)) {
+      skippedInvalidCoords++;
+      continue;
+    }
 
     churches.push({
-      name: normalizeName(rawName),
+      name,
       latitude: coords.lat,
       longitude: coords.lon,
       address: buildAddress(tags),
@@ -123,23 +165,64 @@ function normalize(elements: OverpassElement[]): NormalizedChurch[] {
     });
   }
 
+  if (skippedInvalidName > 0) {
+    console.log(`Skipped ${skippedInvalidName} elements with an invalid/placeholder name.`);
+  }
+  if (skippedInvalidCoords > 0) {
+    console.log(`Skipped ${skippedInvalidCoords} elements with invalid coordinates.`);
+  }
+
   return churches;
 }
 
+// True duplicates are the same normalized name within a short real-world
+// distance of each other — a coordinate-rounding grid can split identical
+// points across cell boundaries or merge distinct nearby ones, so this
+// compares actual haversine distance among same-name candidates instead.
+const DUPLICATE_DISTANCE_METERS = 100;
+
 function dedupe(churches: NormalizedChurch[]): NormalizedChurch[] {
-  const seen = new Map<string, NormalizedChurch>();
+  const byName = new Map<string, NormalizedChurch[]>();
 
   for (const church of churches) {
-    const key = [
-      church.name.toLowerCase(),
-      church.latitude.toFixed(3),
-      church.longitude.toFixed(3),
-    ].join("|");
-
-    if (!seen.has(key)) seen.set(key, church);
+    const key = church.name.toLowerCase();
+    const group = byName.get(key);
+    if (group) group.push(church);
+    else byName.set(key, [church]);
   }
 
-  return [...seen.values()];
+  const deduped: NormalizedChurch[] = [];
+  let duplicateCount = 0;
+
+  for (const group of byName.values()) {
+    const accepted: NormalizedChurch[] = [];
+
+    for (const candidate of group) {
+      const isDuplicate = accepted.some(
+        (existing) =>
+          haversineMeters(
+            { lat: candidate.latitude, lon: candidate.longitude },
+            { lat: existing.latitude, lon: existing.longitude },
+          ) < DUPLICATE_DISTANCE_METERS,
+      );
+
+      if (isDuplicate) {
+        duplicateCount++;
+      } else {
+        accepted.push(candidate);
+      }
+    }
+
+    deduped.push(...accepted);
+  }
+
+  if (duplicateCount > 0) {
+    console.log(
+      `Removed ${duplicateCount} duplicates (same name within ${DUPLICATE_DISTANCE_METERS}m).`,
+    );
+  }
+
+  return deduped;
 }
 
 async function main() {
