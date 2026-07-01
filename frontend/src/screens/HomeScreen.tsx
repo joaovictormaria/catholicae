@@ -1,5 +1,13 @@
 import { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NearbyChurch, useNearbyChurches } from "../api/churches";
@@ -12,13 +20,13 @@ import { OpenClosedBadge } from "../components/OpenClosedBadge";
 
 function ChurchListItem({ church, onPress }: { church: NearbyChurch; onPress: () => void }) {
   return (
-    <Pressable className="border-b border-border p-4" onPress={onPress}>
-      <View className="absolute right-4 top-4">
+    <Pressable style={styles.item} onPress={onPress}>
+      <View style={styles.badge}>
         <OpenClosedBadge openingHours={church.openingHours} />
       </View>
-      <Text className="pr-20 text-base font-semibold text-black">{church.name}</Text>
-      <Text className="text-muted">{formatDistance(church.distanceMeters)}</Text>
-      {church.address && <Text className="text-xs text-faint">{church.address}</Text>}
+      <Text style={styles.name}>{church.name}</Text>
+      <Text style={styles.distance}>{formatDistance(church.distanceMeters)}</Text>
+      {church.address && <Text style={styles.address}>{church.address}</Text>}
     </Pressable>
   );
 }
@@ -37,9 +45,9 @@ export function HomeScreen() {
 
   if (isLoadingLocation) {
     return (
-      <View className="flex-1 items-center justify-center gap-2">
+      <View style={styles.centered}>
         <ActivityIndicator color="#7C3AED" />
-        <Text className="text-muted">Obtendo localização...</Text>
+        <Text style={styles.muted}>Obtendo localização...</Text>
       </View>
     );
   }
@@ -60,11 +68,7 @@ export function HomeScreen() {
 
   return (
     <FlatList
-      contentContainerStyle={
-        data?.churches.length === 0
-          ? { flex: 1, alignItems: "center", justifyContent: "center" }
-          : undefined
-      }
+      contentContainerStyle={data?.churches.length === 0 ? styles.centered : undefined}
       data={data?.churches ?? []}
       keyExtractor={(church) => String(church.id)}
       renderItem={({ item }) => (
@@ -75,8 +79,43 @@ export function HomeScreen() {
       )}
       refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       ListEmptyComponent={
-        <Text className="text-muted">Nenhuma igreja encontrada perto de você.</Text>
+        <Text style={styles.muted}>Nenhuma igreja encontrada perto de você.</Text>
       }
     />
   );
 }
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  item: {
+    padding: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#E0E0E0",
+  },
+  badge: {
+    position: "absolute",
+    right: 16,
+    top: 16,
+  },
+  name: {
+    paddingRight: 80,
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#000000",
+  },
+  distance: {
+    color: "#666666",
+  },
+  address: {
+    fontSize: 12,
+    color: "#999999",
+  },
+  muted: {
+    color: "#666666",
+  },
+});

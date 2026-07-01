@@ -317,11 +317,12 @@ Release público.
 
 ## Entregas
 
-* [ ] Busca funcionando
-* [ ] Mapa funcional
-* [ ] Dados reais carregados
-* [ ] Performance aceitável
-* [ ] Sem bugs críticos
+* [x] Busca funcionando
+* [x] Mapa funcional
+* [x] Dados reais carregados
+* [x] Performance aceitável
+* [x] Sem bugs críticos
+
 
 ---
 

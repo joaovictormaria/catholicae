@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { getOpenStatus } from "../utils/openingStatus";
 
 export function OpenClosedBadge({ openingHours }: { openingHours: string | null }) {
@@ -8,15 +8,50 @@ export function OpenClosedBadge({ openingHours }: { openingHours: string | null 
   const isOpen = status === "open";
 
   return (
-    <View
-      className={`flex-row items-center gap-1 self-start rounded-full px-2 py-0.5 ${
-        isOpen ? "bg-green-100" : "bg-red-100"
-      }`}
-    >
-      <View className={`h-2 w-2 rounded-full ${isOpen ? "bg-green-600" : "bg-red-600"}`} />
-      <Text className={`text-xs font-medium ${isOpen ? "text-green-800" : "text-red-800"}`}>
+    <View style={[styles.badge, isOpen ? styles.open : styles.closed]}>
+      <View style={[styles.dot, isOpen ? styles.dotOpen : styles.dotClosed]} />
+      <Text style={[styles.label, isOpen ? styles.labelOpen : styles.labelClosed]}>
         {isOpen ? "Aberto" : "Fechado"}
       </Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  badge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    alignSelf: "flex-start",
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  open: {
+    backgroundColor: "#DCFCE7",
+  },
+  closed: {
+    backgroundColor: "#FEE2E2",
+  },
+  dot: {
+    height: 8,
+    width: 8,
+    borderRadius: 4,
+  },
+  dotOpen: {
+    backgroundColor: "#16A34A",
+  },
+  dotClosed: {
+    backgroundColor: "#DC2626",
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  labelOpen: {
+    color: "#166534",
+  },
+  labelClosed: {
+    color: "#991B1B",
+  },
+});

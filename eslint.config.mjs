@@ -30,12 +30,5 @@ export default tseslint.config(
       ],
     },
   },
-  {
-    // Metro/Tailwind expect CommonJS config files, not ESM.
-    files: ["**/metro.config.js", "**/tailwind.config.js", "**/babel.config.js"],
-    rules: {
-      "@typescript-eslint/no-require-imports": "off",
-    },
-  },
   eslintConfigPrettier,
 );

@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 interface ErrorStateProps {
   message: string;
@@ -7,9 +7,23 @@ interface ErrorStateProps {
 
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
-    <View className="flex-1 items-center justify-center gap-4 p-6">
-      <Text className="text-center text-danger">{message}</Text>
+    <View style={styles.container}>
+      <Text style={styles.message}>{message}</Text>
       {onRetry && <Button title="Tentar novamente" onPress={onRetry} color="#7C3AED" />}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    padding: 24,
+  },
+  message: {
+    color: "#B00020",
+    textAlign: "center",
+  },
+});
