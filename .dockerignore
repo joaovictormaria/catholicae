@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+**/dist
+**/.expo
+**/.turbo
+**/generated
+**/coverage
+.git
+.github
+docs
+frontend/src
+frontend/App.tsx
+frontend/assets
+*.md
+.env
+**/.env
