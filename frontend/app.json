@@ -20,6 +20,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "O Catholicaê usa sua localização para encontrar igrejas próximas de você."
+        }
+      ]
+    ]
   }
 }

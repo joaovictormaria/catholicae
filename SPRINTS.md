@@ -176,10 +176,10 @@ Capturar posição do usuário.
 
 ## Entregas
 
-* [ ] Permissão de localização
-* [ ] Obtenção de GPS
-* [ ] Atualização dinâmica
-* [ ] Tratamento de erro (sem permissão)
+* [x] Permissão de localização (`requestForegroundPermissionsAsync`, plugin `expo-location` no app.json)
+* [x] Obtenção de GPS (`getCurrentPositionAsync`)
+* [x] Atualização dinâmica (`watchPositionAsync`, 50m/10s)
+* [x] Tratamento de erro (sem permissão) — mensagem exibida na Home
 
 ---
 
