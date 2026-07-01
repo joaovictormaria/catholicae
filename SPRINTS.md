@@ -76,10 +76,10 @@ Garantir consultas geográficas eficientes.
 
 ## Entregas
 
-* [ ] Configuração PostGIS
-* [ ] Tabela Church otimizada
-* [ ] Índice geoespacial (GIST)
-* [ ] Campos:
+* [x] Configuração PostGIS
+* [x] Tabela Church otimizada (coluna `location geography(Point,4326)` sincronizada via trigger)
+* [x] Índice geoespacial (GIST)
+* [x] Campos:
 
   * id
   * name
@@ -89,7 +89,7 @@ Garantir consultas geográficas eficientes.
   * city
   * state
   * source
-* [ ] Query de distância
+* [x] Query de distância (`ST_DWithin`/`ST_Distance`, confirmado uso do índice GIST via EXPLAIN)
 
 ---
 
