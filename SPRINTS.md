@@ -1,61 +1,348 @@
-# SPRINTS.md — Catholicaê
+# SPRINTS.md — Catholicaê (MVP v1)
 
-Registro de planejamento e entregáveis por sprint.
-
----
-
-## Sprint 0 — Fundação
-**Período:** A definir
-**Objetivo:** Setup completo do ambiente de desenvolvimento
-
-### Escopo
-
-- [ ] Configurar monorepo com Turborepo
-- [ ] Setup NestJS (apps/api)
-- [ ] Setup Expo (apps/mobile)
-- [ ] Setup Next.js (apps/web)
-- [ ] Configurar packages compartilhados (types, ui, utils)
-- [ ] Schema Prisma inicial (users, parishes)
-- [ ] Docker Compose para desenvolvimento local
-- [ ] Pipeline CI/CD no GitHub Actions (lint, test, build)
-- [ ] Ambientes: dev, staging, prod
-- [ ] Variáveis de ambiente documentadas
-
-### Critérios de Aceite
-
-- `turbo run build` passa sem erros
-- `docker-compose up` sobe banco + api localmente
-- CI verde no PR de exemplo
+> Versão ajustada para MVP: **catálogo de igrejas + geolocalização + busca**
 
 ---
 
-## Sprint 1 — Autenticação e Paróquias
-**Período:** A definir
-**Objetivo:** Usuários cadastrados e vinculados a paróquias
+# 🧭 Visão do MVP
 
-### Escopo (planejado)
+O Catholicaê v1 é um aplicativo para:
 
-- [ ] Registro e login (email/senha)
-- [ ] JWT + refresh tokens
-- [ ] Perfil de usuário
-- [ ] CRUD de paróquias
-- [ ] Vínculo usuário-paróquia (membro, líder, admin)
-- [ ] Tela de onboarding mobile
+> Encontrar igrejas católicas próximas de forma rápida e precisa.
 
----
+Sem login.
+Sem gestão de paróquias.
+Sem dioceses.
+Sem administração.
 
-## Sprint 2 — Agenda
-**Período:** A definir
-
-### Escopo (planejado)
-
-- [ ] CRUD de missas (horário, intenção, celebrante)
-- [ ] CRUD de eventos
-- [ ] Calendário no app mobile
-- [ ] Painel de gestão web
+Apenas leitura de dados + mapa.
 
 ---
 
-## Sprints Futuras
+# Sprint 0 — Infraestrutura do Projeto
 
-Ver [PRODUCT.md](./PRODUCT.md) para roadmap completo de features.
+## Objetivo
+
+Criar base técnica do sistema.
+
+## Entregas
+
+* [ ] Monorepo (pnpm + Turborepo)
+* [ ] Estrutura apps/api, apps/mobile
+* [ ] Prisma configurado
+* [ ] PostgreSQL + PostGIS via Docker
+* [ ] ESLint + Prettier
+* [ ] Config base TypeScript
+* [ ] README inicial
+
+---
+
+# Sprint 1 — Base de Dados de Igrejas (CRÍTICA)
+
+## Objetivo
+
+Popular o sistema com igrejas reais.
+
+## Fonte principal
+
+* OpenStreetMap (Overpass API)
+
+## Entregas
+
+* [ ] Script de importação OSM
+* [ ] Filtro: `amenity=place_of_worship + religion=catholic`
+* [ ] Normalização de dados
+* [ ] Persistência no PostgreSQL
+* [ ] Deduplicação básica (nome + distância)
+* [ ] Estrutura inicial da tabela Church
+* [ ] Seed inicial funcionando
+
+## Resultado esperado
+
+> Banco já com igrejas reais no Brasil
+
+---
+
+# Sprint 2 — Modelo de Dados + PostGIS
+
+## Objetivo
+
+Garantir consultas geográficas eficientes.
+
+## Entregas
+
+* [ ] Configuração PostGIS
+* [ ] Tabela Church otimizada
+* [ ] Índice geoespacial (GIST)
+* [ ] Campos:
+
+  * id
+  * name
+  * latitude
+  * longitude
+  * address
+  * city
+  * state
+  * source
+* [ ] Query de distância
+
+---
+
+# Sprint 3 — API Base
+
+## Objetivo
+
+Criar backend funcional.
+
+## Entregas
+
+* [ ] NestJS estruturado
+* [ ] PrismaModule
+* [ ] ChurchesModule
+* [ ] Endpoint healthcheck
+* [ ] Padronização de respostas
+* [ ] Tratamento de erros global
+
+---
+
+# Sprint 4 — Busca de Igrejas Próximas (CORE FEATURE)
+
+## Objetivo
+
+Implementar o coração do produto.
+
+## Endpoint principal
+
+```
+GET /churches/nearby
+```
+
+## Entregas
+
+* [ ] Query por latitude/longitude
+* [ ] Raio configurável (km)
+* [ ] Ordenação por distância
+* [ ] Paginação básica
+* [ ] Performance com índice geográfico
+
+## Resultado esperado
+
+> Usuário encontra igrejas ao redor dele em segundos
+
+---
+
+# Sprint 5 — Busca e Detalhes
+
+## Objetivo
+
+Permitir exploração do catálogo.
+
+## Entregas
+
+* [ ] GET /churches/:id
+* [ ] Busca por nome
+* [ ] Filtro por cidade
+* [ ] Filtro por estado
+
+---
+
+# Sprint 6 — App Mobile Base
+
+## Objetivo
+
+Criar estrutura do aplicativo.
+
+## Entregas
+
+* [ ] Expo + React Native configurado
+* [ ] Navegação básica
+* [ ] Tela inicial
+* [ ] Integração com API
+* [ ] React Query
+* [ ] Axios configurado
+
+---
+
+# Sprint 7 — Localização do Usuário
+
+## Objetivo
+
+Capturar posição do usuário.
+
+## Entregas
+
+* [ ] Permissão de localização
+* [ ] Obtenção de GPS
+* [ ] Atualização dinâmica
+* [ ] Tratamento de erro (sem permissão)
+
+---
+
+# Sprint 8 — Tela Home (Lista de Igrejas)
+
+## Objetivo
+
+Primeira experiência do usuário.
+
+## Entregas
+
+* [ ] Lista de igrejas próximas
+* [ ] Distância exibida
+* [ ] Loading state
+* [ ] Empty state
+* [ ] Pull to refresh
+
+---
+
+# Sprint 9 — Mapa
+
+## Objetivo
+
+Visualização geográfica.
+
+## Entregas
+
+* [ ] Integração Google Maps / Mapbox
+* [ ] Markers de igrejas
+* [ ] Seleção de igreja
+* [ ] Navegação para rota externa
+
+---
+
+# Sprint 10 — Detalhes da Igreja
+
+## Objetivo
+
+Mostrar informações completas.
+
+## Entregas
+
+* [ ] Nome
+* [ ] Endereço
+* [ ] Botão “como chegar”
+* [ ] Telefone (se existir)
+* [ ] Abrir no mapa externo
+
+---
+
+# Sprint 11 — Favoritos (OPCIONAL MVP+)
+
+## Objetivo
+
+Salvar igrejas preferidas.
+
+## Entregas
+
+* [ ] Criar usuário local (device-based)
+* [ ] Salvar favoritos localmente
+* [ ] Listar favoritos
+* [ ] Remover favoritos
+
+---
+
+# Sprint 12 — Melhorias de Dados
+
+## Objetivo
+
+Melhorar qualidade da base OSM.
+
+## Entregas
+
+* [ ] Normalização de nomes
+* [ ] Remoção de duplicados
+* [ ] Correção de coordenadas inválidas
+* [ ] Filtragem de falsos positivos
+
+---
+
+# Sprint 13 — Performance
+
+## Objetivo
+
+Garantir escalabilidade.
+
+## Entregas
+
+* [ ] Paginação eficiente
+* [ ] Cache de queries
+* [ ] Índices otimizados
+* [ ] Redução de payload
+
+---
+
+# Sprint 14 — Polimento UX
+
+## Objetivo
+
+Deixar o app utilizável em produção.
+
+## Entregas
+
+* [ ] Loading states
+* [ ] Skeletons
+* [ ] Feedback de erro
+* [ ] UI consistente
+* [ ] Ícones e branding
+
+---
+
+# Sprint 15 — Deploy
+
+## Objetivo
+
+Publicar sistema.
+
+## Entregas
+
+* [ ] Deploy API (Railway/Render)
+* [ ] Build mobile Android
+* [ ] Configuração de ambiente
+* [ ] Variáveis de produção
+
+---
+
+# Sprint 16 — Versão 1.0 (MVP FINAL)
+
+## Objetivo
+
+Release público.
+
+## Entregas
+
+* [ ] Busca funcionando
+* [ ] Mapa funcional
+* [ ] Dados reais carregados
+* [ ] Performance aceitável
+* [ ] Sem bugs críticos
+
+---
+
+# 📌 Backlog futuro (NÃO MVP)
+
+## Enriquecimento de dados
+
+* Horários de missa
+* Confissões
+* Eventos
+* Fotos oficiais
+
+## Plataforma
+
+* Login
+* Favoritos sincronizados
+* Perfil de usuário
+
+## Igreja (fase futura)
+
+* Dioceses
+* Padres
+* Admin de paróquia
+* Reivindicação de perfil
+* Aprovação de dados
+
+## Expansão
+
+* API pública
+* Web app
+* Integração com dioceses
+* Internacionalização
