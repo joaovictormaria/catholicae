@@ -124,11 +124,11 @@ GET /churches/nearby
 
 ## Entregas
 
-* [ ] Query por latitude/longitude
-* [ ] Raio configurável (km)
-* [ ] Ordenação por distância
-* [ ] Paginação profissional
-* [ ] Performance com índice geográfico
+* [x] Query por latitude/longitude
+* [x] Raio configurável (km) — `radiusKm`, padrão 5, máx 100
+* [x] Ordenação por distância
+* [x] Paginação profissional (`page`/`limit`, `total`/`totalPages` via window function)
+* [x] Performance com índice geográfico (mesmo GIST do Sprint 2, validado em produção real via `GET /churches/nearby`)
 
 ## Resultado esperado
 
