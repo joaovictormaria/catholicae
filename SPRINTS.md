@@ -268,10 +268,10 @@ Garantir escalabilidade.
 
 ## Entregas
 
-* [ ] Paginação eficiente
-* [ ] Cache de queries
-* [ ] Índices otimizados
-* [ ] Redução de payload
+* [x] Paginação eficiente (já feita em Sprint 4/5 — window function, 1 query só; revisada aqui)
+* [x] Cache de queries (`CacheModule` global, TTL 60s, `CacheInterceptor` em todas as rotas GET)
+* [x] Índices otimizados (removido btree morto lat/lng; adicionado GIN trigram em `name`, btree em `city`/`state`)
+* [x] Redução de payload (`compression` — gzip confirmado via `Content-Encoding` real)
 
 ---
 
