@@ -42,6 +42,7 @@ interface NormalizedChurch {
   address: string | null;
   city: string | null;
   state: string | null;
+  phone: string | null;
   source: string;
 }
 
@@ -117,6 +118,7 @@ function normalize(elements: OverpassElement[]): NormalizedChurch[] {
       address: buildAddress(tags),
       city: tags["addr:city"] ?? null,
       state: tags["addr:state"] ?? null,
+      phone: tags.phone ?? tags["contact:phone"] ?? null,
       source: SOURCE,
     });
   }

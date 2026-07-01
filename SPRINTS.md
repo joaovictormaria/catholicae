@@ -222,11 +222,11 @@ Mostrar informações completas.
 
 ## Entregas
 
-* [ ] Nome
-* [ ] Endereço
-* [ ] Botão “como chegar”
-* [ ] Telefone (se existir)
-* [ ] Abrir no mapa externo
+* [x] Nome
+* [x] Endereço
+* [x] Botão "como chegar"
+* [x] Telefone (se existir) — campo `phone` novo no schema, capturado do OSM quando disponível (863/12.738 igrejas têm)
+* [x] Abrir no mapa externo (`openInMaps` — pin sem rota, distinto de "como chegar")
 
 ---
 

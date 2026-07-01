@@ -1,20 +1,32 @@
 import { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NearbyChurch, useNearbyChurches } from "../api/churches";
 import { useUserLocation } from "../location/useUserLocation";
 import { formatDistance } from "../utils/formatDistance";
+import { RootStackParamList } from "../navigation/RootNavigator";
 
-function ChurchListItem({ church }: { church: NearbyChurch }) {
+function ChurchListItem({ church, onPress }: { church: NearbyChurch; onPress: () => void }) {
   return (
-    <View style={styles.item}>
+    <Pressable style={styles.item} onPress={onPress}>
       <Text style={styles.itemName}>{church.name}</Text>
       <Text style={styles.itemDistance}>{formatDistance(church.distanceMeters)}</Text>
       {church.address && <Text style={styles.itemAddress}>{church.address}</Text>}
-    </View>
+    </Pressable>
   );
 }
 
 export function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { coords, errorMessage: locationError, isLoading: isLoadingLocation } = useUserLocation();
   const { data, isPending, isError, refetch } = useNearbyChurches(coords);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -64,7 +76,12 @@ export function HomeScreen() {
       contentContainerStyle={data?.churches.length === 0 ? styles.centered : undefined}
       data={data?.churches ?? []}
       keyExtractor={(church) => String(church.id)}
-      renderItem={({ item }) => <ChurchListItem church={item} />}
+      renderItem={({ item }) => (
+        <ChurchListItem
+          church={item}
+          onPress={() => navigation.navigate("ChurchDetail", { id: item.id })}
+        />
+      )}
       refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       ListEmptyComponent={<Text>Nenhuma igreja encontrada perto de você.</Text>}
     />

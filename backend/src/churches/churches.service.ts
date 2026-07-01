@@ -12,6 +12,7 @@ interface NearbyChurchRow {
   address: string | null;
   city: string | null;
   state: string | null;
+  phone: string | null;
   source: string;
   distanceMeters: number;
   totalCount: bigint;
@@ -25,6 +26,7 @@ export interface NearbyChurch {
   address: string | null;
   city: string | null;
   state: string | null;
+  phone: string | null;
   source: string;
   distanceMeters: number;
 }
@@ -73,6 +75,7 @@ export class ChurchesService {
         address,
         city,
         state,
+        phone,
         source,
         ST_Distance(location, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography) AS "distanceMeters",
         COUNT(*) OVER() AS "totalCount"

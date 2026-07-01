@@ -11,8 +11,21 @@ export interface NearbyChurch {
   address: string | null;
   city: string | null;
   state: string | null;
+  phone: string | null;
   source: string;
   distanceMeters: number;
+}
+
+export interface Church {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  phone: string | null;
+  source: string;
 }
 
 export interface NearbyResult {
@@ -35,5 +48,15 @@ export function useNearbyChurches(coords: UserCoords | null, radiusKm = 10) {
       return data.data;
     },
     enabled: coords !== null,
+  });
+}
+
+export function useChurch(id: number) {
+  return useQuery({
+    queryKey: ["churches", id],
+    queryFn: async () => {
+      const { data } = await apiClient.get<ApiResponse<Church>>(`/churches/${id}`);
+      return data.data;
+    },
   });
 }

@@ -15,6 +15,7 @@ model Church {
   address   String?
   city      String?
   state     String?
+  phone     String?
   source    String
   location  Unsupported("geography(Point, 4326)")?
   createdAt DateTime                               @default(now())

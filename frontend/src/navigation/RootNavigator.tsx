@@ -1,19 +1,28 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HomeScreen } from "../screens/HomeScreen";
-import { MapScreen } from "../screens/MapScreen";
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ChurchDetailScreen } from "../screens/ChurchDetailScreen";
+import { TabNavigator } from "./TabNavigator";
 
-export type RootTabParamList = {
-  Lista: undefined;
-  Mapa: undefined;
+export type RootStackParamList = {
+  Tabs: undefined;
+  ChurchDetail: { id: number };
 };
 
-const Tab = createBottomTabNavigator<RootTabParamList>();
+export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
+  RootStackParamList,
+  T
+>;
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Lista" component={HomeScreen} />
-      <Tab.Screen name="Mapa" component={MapScreen} />
-    </Tab.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="Tabs" component={TabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ChurchDetail"
+        component={ChurchDetailScreen}
+        options={{ title: "Detalhes" }}
+      />
+    </Stack.Navigator>
   );
 }

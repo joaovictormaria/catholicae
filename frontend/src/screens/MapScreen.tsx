@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { ActivityIndicator, Button, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, Pressable, StyleSheet, Text, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { NearbyChurch, useNearbyChurches } from "../api/churches";
 import { useUserLocation } from "../location/useUserLocation";
 import { openDirections } from "../utils/openDirections";
+import { RootStackParamList } from "../navigation/RootNavigator";
 
 export function MapScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { coords, errorMessage: locationError, isLoading: isLoadingLocation } = useUserLocation();
   const { data, isPending } = useNearbyChurches(coords);
   const [selected, setSelected] = useState<NearbyChurch | null>(null);
@@ -53,13 +57,16 @@ export function MapScreen() {
         ))}
       </MapView>
       {selected && (
-        <View style={styles.selectedBar}>
+        <Pressable
+          style={styles.selectedBar}
+          onPress={() => navigation.navigate("ChurchDetail", { id: selected.id })}
+        >
           <Text style={styles.selectedName}>{selected.name}</Text>
           <Button
             title="Como chegar"
             onPress={() => openDirections(selected.latitude, selected.longitude)}
           />
-        </View>
+        </Pressable>
       )}
     </View>
   );
