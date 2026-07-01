@@ -12,16 +12,12 @@
 
 ## 📁 Estrutura
 
-apps/
-  api/
-  mobile/
+backend/
+  prisma/
 
-packages/
-  shared/
-  types/
-  utils/
+frontend/
 
-prisma/
+docker/
 
 ---
 

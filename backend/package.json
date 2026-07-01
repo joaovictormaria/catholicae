@@ -1,11 +1,12 @@
 {
-  "name": "@catholicae/api",
+  "name": "@catholicae/backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "MIT",
   "scripts": {
+    "postinstall": "prisma generate",
     "build": "nest build",
     "dev": "nest start --watch",
     "start": "nest start",
@@ -17,6 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "import:osm": "ts-node -r tsconfig-paths/register src/scripts/import-osm-churches.ts",
     "query:nearby": "ts-node -r tsconfig-paths/register src/scripts/query-nearby-churches.ts"
   },
@@ -25,6 +29,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
     "dotenv": "17.4.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
@@ -38,6 +43,7 @@
     "@types/node": "^24.0.0",
     "@types/supertest": "^7.0.0",
     "jest": "^30.0.0",
+    "prisma": "7.8.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",

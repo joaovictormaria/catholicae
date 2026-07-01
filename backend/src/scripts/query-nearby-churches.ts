@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma";
 
-config({ path: resolve(__dirname, "../../../../.env") });
+config({ path: resolve(__dirname, "../../.env") });
 
 // Sé Cathedral, São Paulo — just a fixed reference point to validate the query/index.
 const ORIGIN_LAT = -23.5505;

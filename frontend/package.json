@@ -1,5 +1,5 @@
 {
-  "name": "@catholicae/mobile",
+  "name": "@catholicae/frontend",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {

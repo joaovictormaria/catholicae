@@ -28,7 +28,7 @@ Criar base técnica do sistema.
 ## Entregas
 
 * [x] Monorepo (pnpm + Turborepo)
-* [x] Estrutura apps/api, apps/mobile
+* [x] Estrutura backend/, frontend/
 * [x] Prisma configurado
 * [x] PostgreSQL + PostGIS via Docker
 * [x] ESLint + Prettier

@@ -1,9 +1,0 @@
-{
-  "name": "@catholicae/config",
-  "version": "0.0.0",
-  "private": true,
-  "license": "MIT",
-  "files": [
-    "tsconfig.base.json"
-  ]
-}

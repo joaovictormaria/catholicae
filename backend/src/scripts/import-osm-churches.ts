@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma";
 
-config({ path: resolve(__dirname, "../../../../.env") });
+config({ path: resolve(__dirname, "../../.env") });
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const SOURCE = "osm";

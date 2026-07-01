@@ -7,17 +7,10 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@prisma/client':
-        specifier: 7.8.0
-        version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.3))(react@19.2.3)(typescript@6.0.3))(typescript@6.0.3)
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.6.0(jiti@2.7.0))
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       eslint:
         specifier: 10.6.0
         version: 10.6.0(jiti@2.7.0)
@@ -30,9 +23,6 @@ importers:
       prettier:
         specifier: 3.9.4
         version: 3.9.4
-      prisma:
-        specifier: 7.8.0
-        version: 7.8.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.3))(react@19.2.3)(typescript@6.0.3)
       turbo:
         specifier: 2.10.2
         version: 2.10.2
@@ -43,7 +33,7 @@ importers:
         specifier: 8.62.1
         version: 8.62.1(eslint@10.6.0(jiti@2.7.0))(typescript@6.0.3)
 
-  apps/api:
+  backend:
     dependencies:
       '@nestjs/common':
         specifier: ^11.0.1
@@ -57,6 +47,9 @@ importers:
       '@prisma/adapter-pg':
         specifier: 7.8.0
         version: 7.8.0
+      '@prisma/client':
+        specifier: 7.8.0
+        version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.3))(react@19.2.3)(typescript@6.0.3))(typescript@6.0.3)
       dotenv:
         specifier: 17.4.2
         version: 17.4.2
@@ -91,6 +84,9 @@ importers:
       jest:
         specifier: ^30.0.0
         version: 30.4.2(@types/node@24.13.2)(ts-node@10.9.2(@types/node@24.13.2)(typescript@6.0.3))
+      prisma:
+        specifier: 7.8.0
+        version: 7.8.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.3))(react@19.2.3)(typescript@6.0.3)
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -113,7 +109,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  apps/mobile:
+  frontend:
     dependencies:
       expo:
         specifier: ~57.0.1
@@ -134,8 +130,6 @@ importers:
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
-
-  packages/config: {}
 
 packages:
 

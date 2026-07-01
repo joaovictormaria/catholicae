@@ -46,10 +46,10 @@ Monorepo com:
 ## 🚀 Como rodar
 
 ```bash
-cp .env.example .env
+cp backend/.env.example backend/.env
 pnpm install
 docker compose -f docker/docker-compose.yml up -d
-pnpm prisma:migrate
-pnpm --filter @catholicae/api run import:osm
+pnpm --filter @catholicae/backend run prisma:migrate
+pnpm --filter @catholicae/backend run import:osm
 pnpm dev
 ```
