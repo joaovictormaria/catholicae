@@ -1,0 +1,29 @@
+{
+  "name": "catholicae",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Catholicaê — encontre uma igreja católica perto de você.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "turbo": "2.10.2",
+    "typescript": "6.0.3",
+    "prettier": "3.9.4",
+    "eslint": "10.6.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.62.1",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.7.0"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24"
+  }
+}
